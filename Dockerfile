@@ -3,7 +3,7 @@ COPY . /app
 WORKDIR /app
 
 RUN npm ci
-RUN npm run build --prod
+RUN npm run build
 
 FROM nginx:alpine
 COPY --from=BUILD /app/dist/link-shortener /usr/share/nginx/html 
