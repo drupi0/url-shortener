@@ -1,9 +1,9 @@
 FROM node:slim
 WORKDIR /api
-COPY package*.json ./
+COPY ./api/package*.json ./
 
 RUN npm ci
-COPY . .
+COPY ./api/ .
 
 EXPOSE 8080
 

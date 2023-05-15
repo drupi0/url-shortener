@@ -12,7 +12,6 @@ services:
   api-service:
     container_name: api-service
     image: ghcr.io/drupi0/url-api-service:latest
-    image: url-api-service:latest
     restart: on-failure
     pull_policy: always
     environment:
@@ -25,7 +24,7 @@ services:
     restart: on-failure
     pull_policy: always
     ports:
-      - 80:80
+      - 4200:80
     depends_on:
       - api-service
     networks:
