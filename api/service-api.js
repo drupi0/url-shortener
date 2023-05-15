@@ -1,4 +1,4 @@
-const { createDocument, getDocuments } = require('./mongo-api');
+const { createDocument, getDocuments, deleteDocument } = require('./mongo-api');
 
 const collectionName = "URL_LIST";
 
@@ -8,7 +8,7 @@ async function createUrl(longUrl, accountId) {
     });
 
     if(checkUrl.length) {
-        return checkUrl[0].shortId;
+        await deleteDocument(collectionName, checkUrl[0]._id);
     }
 
     const shortId = (+new Date).toString(36).slice(-5);

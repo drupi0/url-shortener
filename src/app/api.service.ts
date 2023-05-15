@@ -50,9 +50,7 @@ export class ApiService {
         return;
       }
 
-      if(!this.dataStore.getValue().some(urlData => urlData.longUrl === longUrl)) {
-        this.dataStore.next([...this.dataStore.getValue(), { longUrl, accountId, shortId: data as string }]);
-      }
+      this.dataStore.next([...this.dataStore.getValue().filter(urlData => urlData.longUrl !== longUrl), { longUrl, accountId, shortId: data as string }]);
 
     }));
 

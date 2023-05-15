@@ -37,7 +37,7 @@ async function updateDocument(collectionName, documentId, update) {
 async function deleteDocument(collectionName, documentId) {
   const db = await connectToDatabase();
   const collection = db.collection(collectionName);
-  const result = await collection.deleteOne({ _id: ObjectId(documentId) });
+  const result = await collection.deleteOne({ _id: new ObjectId(documentId) });
   return result.deletedCount;
 }
 
