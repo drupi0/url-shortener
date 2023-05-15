@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ApiService, UrlData } from './api.service';
 import { EMPTY, catchError, first, interval, map } from 'rxjs';
+import { environment } from 'src/environment';
 
 @Component({
   selector: 'app-root',
@@ -36,13 +37,13 @@ export class AppComponent implements OnInit {
   }
 
   getShortLink(url: UrlData) {
-    return `${window.location.href}s/${ url.shortId }`;
+    return `${environment.apiUrl}/s/${ url.shortId }`;
   }
 
   copyLink(url: UrlData, copyButton: HTMLButtonElement) {
     const textHolder = document.createElement('input');
     textHolder.type = 'text';
-    textHolder.value = `${window.location.href}s/${ url.shortId }`;
+    textHolder.value = `${environment.apiUrl}/s/${ url.shortId }`;
     document.body.append(textHolder);
     textHolder.select();
     document.execCommand("Copy");

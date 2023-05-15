@@ -1,4 +1,4 @@
-FROM node:slim
+FROM node:14
 WORKDIR /api
 COPY ./api/package*.json ./
 

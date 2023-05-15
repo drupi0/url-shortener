@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: '/s',
+    apiUrl: 'https://s.codersph.org',
 }

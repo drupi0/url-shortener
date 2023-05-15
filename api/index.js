@@ -7,6 +7,12 @@ fastify.register(cors, {
     origin: "*"
 });
 
+fastify.get('/', async (req, res) => {
+    res.send({
+        data: 'hello world!'
+    });
+});
+
 fastify.post('/create-url', async (req, res) => {
     const { longUrl, accountId } = req.body;
 
@@ -34,7 +40,7 @@ fastify.post('/get-url', async (req, res) => {
     res.send({ data });
 });
 
-fastify.get('/:shortId', async (req, res) => {
+fastify.get('/s/:shortId', async (req, res) => {
     const { shortId } = req.params;
 
     const data = await getUrl(shortId);
@@ -67,7 +73,7 @@ fastify.post('/get-urls', async (req, res) => {
 
 const start = async () => {
     try {
-        await fastify.listen({ port: 8080 })
+        await fastify.listen({ port: 8080, host: '0.0.0.0' })
     } catch (err) {
         fastify.log.error(err)
         process.exit(1)

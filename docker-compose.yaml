@@ -1,4 +1,8 @@
 version: '3.7'
+networks:
+  service-network:
+    name: service-network
+    driver: bridge
 services:
   db-service:
     image: mongo:latest
@@ -11,15 +15,19 @@ services:
       - service-network
   api-service:
     container_name: api-service
+    hostname: api-service
     image: ghcr.io/drupi0/url-api-service:latest
     restart: on-failure
     pull_policy: always
     environment:
       MONGO_URL: mongodb://db-service:27017
+    ports:
+      - 8080:8080
     networks:
       - service-network
   ui-service:
     container_name: ui-service
+    hostname: ui-service
     image: ghcr.io/drupi0/url-ui-service:latest
     restart: on-failure
     pull_policy: always
@@ -31,6 +39,3 @@ services:
       - service-network
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-networks:
-  service-network:
-    driver: bridge
