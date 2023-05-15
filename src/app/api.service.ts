@@ -18,7 +18,7 @@ export interface UrlData {
 })
 export class ApiService {
   
-  URL: string = environment.apiUrl;
+  URL: string = environment.apiUrl || `/api`;
   dataStore: BehaviorSubject<UrlData[]> = new BehaviorSubject([] as UrlData[]);
 
   constructor(private client: HttpClient) {

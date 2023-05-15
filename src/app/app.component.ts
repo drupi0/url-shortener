@@ -23,7 +23,8 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    this.api.saveUrl(this.longUrl, this.accountId).pipe(catchError(() => {
+    this.api.saveUrl(this.longUrl, this.accountId).pipe(catchError((e) => {
+      console.log(e);
       this.error = "Invalid URL supplied";
       return EMPTY;
     })).subscribe(() => {
@@ -37,13 +38,13 @@ export class AppComponent implements OnInit {
   }
 
   getShortLink(url: UrlData) {
-    return `${environment.apiUrl}/s/${ url.shortId }`;
+    return `${environment.apiUrl || window.location.host }/s/${ url.shortId }`;
   }
 
   copyLink(url: UrlData, copyButton: HTMLButtonElement) {
     const textHolder = document.createElement('input');
     textHolder.type = 'text';
-    textHolder.value = `${environment.apiUrl}/s/${ url.shortId }`;
+    textHolder.value = `${environment.apiUrl || window.location.host}/s/${ url.shortId }`;
     document.body.append(textHolder);
     textHolder.select();
     document.execCommand("Copy");
