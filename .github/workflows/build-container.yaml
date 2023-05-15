@@ -8,27 +8,39 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - dockerfile: ./Dockerfile
+            image: ghcr.io/drupi0/url-ui-service
+          - dockerfile: ./api/Dockerfile
+            image: ghcr.io/drupi0/url-api-service
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Login to GitHub Packages
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.TOKEN }}
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ matrix.image }}
+
       - name: Build and push UI Container
         uses: docker/build-push-action@v2
         with:
           context: .
+          file: ${{ matrix.dockerfile }}
           push: true
-          tags: ghcr.io/drupi0/url-ui-service:latest
-
-      - name: Build and push API Container
-        uses: docker/build-push-action@v2
-        with:
-          context: /api/.
-          push: true
-          tags: ghcr.io/drupi0/url-api-service:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
