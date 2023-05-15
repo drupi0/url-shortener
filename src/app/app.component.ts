@@ -1,7 +1,7 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { ApiService, UrlData } from './api.service';
-import { EMPTY, catchError, first, interval, map } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { EMPTY, catchError, first, interval } from 'rxjs';
 import { environment } from 'src/environment';
+import { ApiService, UrlData } from './api.service';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountId = this.api.retrieveAccountId();
+    
   }
 
   shortenUrl() {

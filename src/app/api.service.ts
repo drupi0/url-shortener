@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, filter, from, map, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, map, tap } from 'rxjs';
 import { environment } from 'src/environment';
 
 export interface ApiData {
@@ -20,6 +20,7 @@ export class ApiService {
   
   URL: string = environment.apiUrl || `/api`;
   dataStore: BehaviorSubject<UrlData[]> = new BehaviorSubject([] as UrlData[]);
+  hasFetchedFirst: boolean = false;
 
   constructor(private client: HttpClient) {
   }
@@ -62,10 +63,15 @@ export class ApiService {
       return this.dataStore.pipe(map(urlList => urlList.filter(urlData => urlData.accountId === accountId).reverse()));
     }
 
+    if(this.hasFetchedFirst) {
+      return EMPTY;
+    }
+
     const payload = { accountId };
 
     return this.client.post<{ data: UrlData[] }>(`${this.URL}/get-urls`, payload).pipe(tap(urlList => {
       this.dataStore.next(urlList.data);
+      this.hasFetchedFirst = true;
     }), map(apiResponse => apiResponse.data));
   }
 
