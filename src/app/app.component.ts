@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { EMPTY, catchError, first, interval } from 'rxjs';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { EMPTY, catchError, finalize, first, interval } from 'rxjs';
 import { environment } from 'src/environment';
 import { ApiService, UrlData } from './api.service';
 
@@ -12,6 +12,10 @@ export class AppComponent implements OnInit {
   longUrl: string = "";
   accountId: string = "";
   error: string = "";
+  showNewLink: boolean = false;
+
+  @ViewChild("UrlLinks")
+  urlLinkContainer: ElementRef | undefined;
 
   ngOnInit(): void {
     this.accountId = this.api.retrieveAccountId();
@@ -31,6 +35,13 @@ export class AppComponent implements OnInit {
     })).subscribe(() => {
       this.longUrl = "";
       this.error = "";
+      
+      this.urlLinkContainer?.nativeElement.scrollIntoView({ behavior: 'smooth'});
+      this.showNewLink = true;
+
+      interval(1000).pipe(first()).subscribe(() => {
+        this.showNewLink = false;
+      });
     });
   }
 
@@ -52,9 +63,11 @@ export class AppComponent implements OnInit {
     document.body.removeChild(textHolder);
 
     copyButton.innerText = "Copied!";
+    copyButton.classList.add("text-orange-500", "border-orange-500");
 
     interval(1000).pipe(first()).subscribe(() => {
       copyButton.innerText = "Copy Link";
+      copyButton.classList.remove("text-orange-500", "border-orange-500");
     });
   }
 
