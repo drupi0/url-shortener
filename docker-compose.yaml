@@ -1,0 +1,37 @@
+version: '3.7'
+services:
+  db-service:
+    image: mongo:latest
+    hostname: db-service
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/db:/data/db
+    networks:
+      - service-network
+  api-service:
+    container_name: api-service
+    image: ghcr.io/drupi0/url-api-service:latest
+    image: url-api-service:latest
+    restart: on-failure
+    pull_policy: always
+    environment:
+      MONGO_URL: mongodb://db-service:27017
+    networks:
+      - service-network
+  ui-service:
+    container_name: ui-service
+    image: ghcr.io/drupi0/url-ui-service:latest
+    restart: on-failure
+    pull_policy: always
+    ports:
+      - 80:80
+    depends_on:
+      - api-service
+    networks:
+      - service-network
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+networks:
+  service-network:
+    driver: bridge

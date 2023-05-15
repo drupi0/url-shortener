@@ -8,6 +8,7 @@
 
 # Node
 /node_modules
+api/node_modules
 npm-debug.log
 yarn-error.log
 
@@ -36,6 +37,7 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+api/data/
 
 # System files
 .DS_Store
