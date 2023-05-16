@@ -7,8 +7,6 @@ services:
   db-service:
     image: mongo:latest
     hostname: db-service
-    ports:
-      - 27017:27017
     volumes:
       - ./data/db:/data/db
     networks:
@@ -21,6 +19,7 @@ services:
     pull_policy: always
     environment:
       MONGO_URL: mongodb://db-service:27017
+      ALLOWED_ORIGINS: "codersph.org shrinkly.cc"
     networks:
       - service-network
   ui-service:

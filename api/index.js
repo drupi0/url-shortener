@@ -2,9 +2,10 @@ const { createUrl, getUrl, getUrlsForAccount } = require('./service-api');
 
 const fastify = require('fastify')({ logger: true });
 const cors = require("@fastify/cors");
+const allowed_origins = process.env.ALLOWED_ORIGINS || "*";
 
 fastify.register(cors, {
-    origin: "*"
+    origin: allowed_origins
 });
 
 fastify.get('/', async (req, res) => {
