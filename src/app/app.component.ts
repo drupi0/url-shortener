@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
   copyLink(url: UrlData, copyButton: HTMLButtonElement): void {
     const textHolder = document.createElement('input');
     textHolder.type = 'text';
-    textHolder.value = `${environment.apiUrl || window.location.host}/s/${ url.shortId }`;
+    textHolder.value = `${environment.apiUrl || window.location.protocol + "//" +  window.location.host}/s/${ url.shortId }`;
     document.body.append(textHolder);
     textHolder.select();
     document.execCommand("Copy");

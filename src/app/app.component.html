@@ -1,6 +1,6 @@
 <div class="flex flex-col justify-center place-content-center h-screen w-screen" #CreateLinks>
   <div class="flex flex-1 items-center justify-center flex-col">
-    <span class="text-4xl font-bold">Simple URL Shortener</span>
+    <span class="text-4xl font-bold">Shrinkly.cc</span>
     <span class="mt-3 font-mono">Make your links shorter</span>
     <div class="mt-10 flex place-content-start items-start">
       <div class="flex flex-col">
@@ -12,30 +12,33 @@
     </div>
   </div>
 </div>
-<div class="w-screen px-10 min-h-screen bg-zinc-950 pt-10 flex flex-col overflow-auto"
-  *ngIf="fetchAllUrlsForAccount() | async as urlList" #UrlLinks>
-  <span class="text-3xl font-bold text-white mb-6 text-center md:text-left">Your Shortlinks:</span>
-  <div class="transition-all duration-150 shadow-sm border rounded-md flex p-6 mb-4 md:mb-0 mt-3 text-white flex-col md:flex-row"
-    *ngFor="let url of urlList; let index = index" [ngClass]="{
+<ng-container *ngIf="fetchAllUrlsForAccount() | async as urlList">
+  <div class="w-screen px-10 min-h-screen bg-zinc-950 pt-10 flex flex-col overflow-auto"
+    *ngIf="urlList.length" #UrlLinks>
+    <span class="text-3xl font-bold text-white mb-6 text-center md:text-left">Your Shortlinks:</span>
+    <div
+      class="transition-all duration-150 shadow-sm border rounded-md flex p-6 mb-4 md:mb-0 mt-3 text-white flex-col md:flex-row"
+      *ngFor="let url of urlList; let index = index" [ngClass]="{
       'border-orange-500 scale-110 md:scale-105': showNewLink && index === 0
     }">
-    <div class="flex-1 flex flex-col overflow-hidden text-center md:text-left">
-      <div class="flex flex-col">
-        <span class="text-2xl font-bold inline md:hidden mb-2" [ngClass]="{
+      <div class="flex-1 flex flex-col overflow-hidden text-center md:text-left">
+        <div class="flex flex-col">
+          <span class="text-2xl font-bold inline md:hidden mb-2" [ngClass]="{
           'text-orange-500': showNewLink && index === 0
         }">{{ url.shortId }}</span>
-        <span class="text-lg font-bold hidden md:inline" role="button" (click)="copyLink(url, copyLinkButton)">{{
-          getShortLink(url) }}</span>
+          <span class="text-lg font-bold hidden md:inline" role="button" (click)="copyLink(url, copyLinkButton)">{{
+            getShortLink(url) }}</span>
+        </div>
+        <span class="truncate opacity-50 text-sm font-mono">{{ url.longUrl }}</span>
       </div>
-      <span class="truncate opacity-50 text-sm font-mono">{{ url.longUrl }}</span>
-    </div>
-    <div class="md:ps-10 text-center">
-      <button
-        class="mt-5 md:mt-0  md:py-2 py-4 md:px-4 w-full border rounded-lg active:opacity-70 hover:opacity-70 md:ms-3 shadow-sm font-bold"
-        (click)="copyLink(url, copyLinkButton)" #copyLinkButton [ngClass]="{
+      <div class="md:ps-10 text-center">
+        <button
+          class="mt-5 md:mt-0  md:py-2 py-4 md:px-4 w-full border rounded-lg active:opacity-70 hover:opacity-70 md:ms-3 shadow-sm font-bold"
+          (click)="copyLink(url, copyLinkButton)" #copyLinkButton [ngClass]="{
           'text-orange-500 border-orange-500': showNewLink && index === 0
         }">Copy Link</button>
+      </div>
     </div>
+    <div class="h-40"></div>
   </div>
-  <div class="h-40"></div>
-</div>
+</ng-container>
