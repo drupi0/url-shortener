@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountId = this.api.retrieveAccountId();
+    this.api.retrieveUrls(this.accountId).subscribe();
   }
 
   scrollToUrlList(): Observable<[number, number]> {

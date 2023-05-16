@@ -20,7 +20,6 @@ export class ApiService {
   
   URL: string = environment.apiUrl || `/api`;
   dataStore: BehaviorSubject<UrlData[]> = new BehaviorSubject([] as UrlData[]);
-  hasFetchedFirst: boolean = false;
 
   constructor(private client: HttpClient) {
   }
@@ -56,21 +55,17 @@ export class ApiService {
 
   }
 
-  getUrls(accountId: string) {
-    if(this.dataStore.getValue().length) {
-      return this.dataStore.pipe(map(urlList => urlList.filter(urlData => urlData.accountId === accountId).reverse()));
-    }
-
-    if(this.hasFetchedFirst) {
-      return EMPTY;
-    }
-
+  retrieveUrls(accountId: string) {
     const payload = { accountId };
-
     return this.client.post<{ data: UrlData[] }>(`${this.URL}/get-urls`, payload).pipe(tap(urlList => {
       this.dataStore.next(urlList.data);
-      this.hasFetchedFirst = true;
     }), map(apiResponse => apiResponse.data));
   }
+
+  getUrls(accountId: string) {
+    return this.dataStore.pipe(map(urlList => urlList.filter(urlData => urlData.accountId === accountId).reverse()));
+  }
+
+  
 
 }

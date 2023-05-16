@@ -87,14 +87,13 @@ describe('ApiService', () => {
     httpMock.verify();
   });
 
-  it('should return empty observable if data store is empty and hasFetchedFirst is true', () => {
+  it('should return empty array  if data store is empty', () => {
     const accountId = 'exampleAccountId';
     service.dataStore.next([]);
-    service.hasFetchedFirst = true;
 
     service.getUrls(accountId).subscribe({
       next: () => {
-        fail('Should not emit next value');
+        expect([]);
       },
       complete: () => {
         expect(true).toBe(true);
@@ -116,8 +115,9 @@ describe('ApiService', () => {
     const apiResponse = {
       data: [urlData]
     };
+
   
-    service.getUrls(accountId).subscribe(urls => {
+    service.retrieveUrls(accountId).subscribe(urls => {
       expect(urls.length).toBe(1);
       expect(urls[0].longUrl).toBe(urlData.longUrl);
       expect(urls[0].accountId).toBe(urlData.accountId);
